@@ -5,14 +5,26 @@ import 'package:random_words/random_words.dart';
 
 import 'package:http/http.dart' as http;
 
-void main() {
-  Questions.getPhrase();
-  Questions.buildQuestion(
-      'Pandemia não demove estudantes portugueses de procurar universidades estrangeiras');
+Future<void> main() async {
+  String phrase = await Questions.getPhrase();
+  try {
+    if (phrase != "") {
+      Map<String, String> map = Questions.buildQuestion(phrase);
+      if (map.isEmpty) {
+        main();
+      } else {
+        print(map);
+      }
+    } else {
+      main();
+    }
+  } catch (e) {
+    main();
+  }
 }
 
 class Questions {
-  static buildQuestion(String phrase) {
+  static Map<String, String> buildQuestion(String phrase) {
     Map<String, List<String>> matching = {
       'QUANDO?': [
         "em",
@@ -179,23 +191,26 @@ class Questions {
         filteredResults[r.key] = r.value;
       }
     }
+    Map<String, String> questionAnswer = {};
+
     for (var s in filteredResults.entries) {
-      print(s.key + ": " + s.value);
+      questionAnswer[s.key] = s.value;
     }
+    return questionAnswer;
   }
 
-  static getPhrase() async {
-
+  static Future<String> getPhrase() async {
     String word = generateNoun().take(1).first.word;
 
-    final response = await http
-        .get(Uri.parse('https://arquivo.pt/textsearch?q=' + word + "&maxItems=1&prettyPrint=true&from=20190101000000&siteSearch=http://www.publico.pt"));
+    final response = await http.get(Uri.parse('https://arquivo.pt/textsearch?q=' +
+        word +
+        "&maxItems=1&prettyPrint=true&from=20190101000000&siteSearch=http://www.publico.pt"));
 
     String source = (Utf8Decoder().convert(response.bodyBytes));
     Map<String, dynamic> list = json.decode(source);
     List<dynamic> lista = list["response_items"];
     String res = lista[0]["title"];
     res = res.split(" | ")[0];
-    print(res);
+    return res;
   }
 }
