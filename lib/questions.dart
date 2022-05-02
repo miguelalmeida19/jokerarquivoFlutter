@@ -1,6 +1,6 @@
 void main() {
   Questions.buildQuestion(
-      'Dronestagram: voaram sobre o mundo, em 2018, para terem as melhores fotografias aéreas');
+      'RoboRoach: o primeiro cyborg comercializável do mundo é... uma barata');
 }
 
 class Questions {
@@ -84,12 +84,18 @@ class Questions {
       'OU O QUÊ?': ["ou"],
       'PELO QUÊ?': ["pela", "pelo", "por"],
       'EM QUÊ?': ["nas", "nos", "na", "no"],
-      'EM O QUÊ?': ["e"],
+      'E O QUÊ?': ["e"],
       "MAS O QUÊ?": ["mas"],
       "QUER O QUÊ?": ["quer"],
+      "É O QUÊ?": ["é"]
     };
 
+    List<String> diasSemana = ["segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","sábado","domingo"];
+
+    List<String> meses = ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+
     List<String> list_words = phrase.split(' ');
+
     Map<String, String> results = {};
     int counter = 0;
     List<String> matchingValues = <String>[];
@@ -130,7 +136,18 @@ class Questions {
     for (MapEntry<String, String> r in results.entries) {
       if (r.key.contains("quem?") &&
           r.value.split(" ")[1][0].toUpperCase() != r.value.split(" ")[1][0]) {
-      } else {
+      }
+      else if (r.key.contains("onde?") &&
+          (r.value.split(" ")[2].contains('20') ||
+              diasSemana.contains(r.value.split(" ")[2]) ||
+              meses.contains(r.value.split(" ")[2]))){
+      }
+      else if (r.key.contains("quando?") &&
+          (!r.value.split(" ")[2].contains('20') ||
+              !diasSemana.contains(r.value.split(" ")[2]) ||
+              !meses.contains(r.value.split(" ")[2]))){
+      }
+      else {
         filteredResults[r.key] = r.value;
       }
     }
