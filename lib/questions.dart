@@ -1,4 +1,12 @@
+import 'dart:convert';
+import 'dart:convert' as convert;
+import 'dart:math';
+import 'package:random_words/random_words.dart';
+
+import 'package:http/http.dart' as http;
+
 void main() {
+  Questions.getPhrase();
   Questions.buildQuestion(
       'Pandemia não demove estudantes portugueses de procurar universidades estrangeiras');
 }
@@ -90,9 +98,30 @@ class Questions {
       "É O QUÊ?": ["é"]
     };
 
-    List<String> diasSemana = ["segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","sábado","domingo"];
+    List<String> diasSemana = [
+      "segunda-feira",
+      "terça-feira",
+      "quarta-feira",
+      "quinta-feira",
+      "sexta-feira",
+      "sábado",
+      "domingo"
+    ];
 
-    List<String> meses = ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+    List<String> meses = [
+      "janeiro",
+      "fevereiro",
+      "março",
+      "abril",
+      "maio",
+      "junho",
+      "julho",
+      "agosto",
+      "setembro",
+      "outubro",
+      "novembro",
+      "dezembro"
+    ];
 
     phrase = phrase.replaceAll('...', "");
 
@@ -138,23 +167,35 @@ class Questions {
     for (MapEntry<String, String> r in results.entries) {
       if (r.key.contains("quem?") &&
           r.value.split(" ")[1][0].toUpperCase() != r.value.split(" ")[1][0]) {
-      }
-      else if (r.key.contains("onde?") &&
+      } else if (r.key.contains("onde?") &&
           (r.value.split(" ")[2].contains('20') ||
               diasSemana.contains(r.value.split(" ")[2]) ||
-              meses.contains(r.value.split(" ")[2]))){
-      }
-      else if (r.key.contains("quando?") &&
+              meses.contains(r.value.split(" ")[2]))) {
+      } else if (r.key.contains("quando?") &&
           (!r.value.split(" ")[2].contains('20') ||
               !diasSemana.contains(r.value.split(" ")[2]) ||
-              !meses.contains(r.value.split(" ")[2]))){
-      }
-      else {
+              !meses.contains(r.value.split(" ")[2]))) {
+      } else {
         filteredResults[r.key] = r.value;
       }
     }
     for (var s in filteredResults.entries) {
       print(s.key + ": " + s.value);
     }
+  }
+
+  static getPhrase() async {
+
+    String word = generateNoun().take(1).first.word;
+
+    final response = await http
+        .get(Uri.parse('https://arquivo.pt/textsearch?q=' + word + "&maxItems=1&prettyPrint=true&from=20190101000000&siteSearch=http://www.publico.pt"));
+
+    String source = (Utf8Decoder().convert(response.bodyBytes));
+    Map<String, dynamic> list = json.decode(source);
+    List<dynamic> lista = list["response_items"];
+    String res = lista[0]["title"];
+    res = res.split(" | ")[0];
+    print(res);
   }
 }

@@ -27,6 +27,8 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  random_words: ^1.0.2
+  http: ^0.13.4
   flutter_neumorphic: ^3.2.0
   google_fonts: ^2.3.1
   flutter_countdown_timer: ^4.1.0
