@@ -1,6 +1,6 @@
 void main() {
   Questions.buildQuestion(
-      'RoboRoach: o primeiro cyborg comercializável do mundo é... uma barata');
+      'Pandemia não demove estudantes portugueses de procurar universidades estrangeiras');
 }
 
 class Questions {
@@ -57,7 +57,7 @@ class Questions {
         "externamente",
         "em"
       ],
-      'O QUÊ?': ["é", "a"],
+      'O QUÊ?': ["a"],
       'DE QUÊ?': ["de", "da"],
       'DE QUEM?': ["de"],
       'QUEM?': ["um", "uma", "o", "os", "a", "as"],
@@ -93,6 +93,8 @@ class Questions {
     List<String> diasSemana = ["segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","sábado","domingo"];
 
     List<String> meses = ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+
+    phrase = phrase.replaceAll('...', "");
 
     List<String> list_words = phrase.split(' ');
 
