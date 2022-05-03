@@ -40,6 +40,7 @@ class _JokerState extends State<Joker> {
   @override
   void initState() {
     super.initState();
+    buildQuizes();
 
     buildQuiz().then((results) {
       setState(() {
@@ -48,8 +49,6 @@ class _JokerState extends State<Joker> {
         _atual = results;
       });
     });
-
-    buildQuizes();
   }
 
   @override
@@ -206,12 +205,13 @@ class _JokerState extends State<Joker> {
                                         StatusAlert.show(
                                           context,
                                           duration: const Duration(seconds: 2),
-                                          title: 'A sua resposta está ... CERTAAAAA!',
+                                          title: 'CERTAAAAA!',
                                           configuration: const IconConfiguration(icon: Icons.done),
+                                          backgroundColor: Colors.green
                                         );
                                         setState(() {
                                           roundNumber++;
-                                          _atual = _quizes[roundNumber + 1];
+                                          _atual = _quizes[roundNumber - 1];
                                         });
                                         build(context);
                                       } else {
@@ -241,12 +241,13 @@ class _JokerState extends State<Joker> {
                                         StatusAlert.show(
                                           context,
                                           duration: const Duration(seconds: 2),
-                                          title: 'A sua resposta está ... CERTAAAAA!',
+                                          title: 'CERTAAAAA!',
                                           configuration: const IconConfiguration(icon: Icons.done),
+                                            backgroundColor: Colors.green
                                         );
                                         setState(() {
                                           roundNumber++;
-                                          _atual = _quizes[roundNumber + 1];
+                                          _atual = _quizes[roundNumber - 1];
                                         });
                                       } else {
                                       }
@@ -274,12 +275,13 @@ class _JokerState extends State<Joker> {
                                         StatusAlert.show(
                                           context,
                                           duration: const Duration(seconds: 2),
-                                          title: 'A sua resposta está ... CERTAAAAA!',
+                                          title: 'CERTAAAAA!',
                                           configuration: const IconConfiguration(icon: Icons.done),
+                                            backgroundColor: Colors.green
                                         );
                                         setState(() {
                                           roundNumber++;
-                                          _atual = _quizes[roundNumber + 1];
+                                          _atual = _quizes[roundNumber - 1];
                                         });
                                       } else {
                                       }
@@ -307,12 +309,13 @@ class _JokerState extends State<Joker> {
                                         StatusAlert.show(
                                           context,
                                           duration: const Duration(seconds: 2),
-                                          title: 'A sua resposta está ... CERTAAAAA!',
+                                          title: 'CERTAAAAA!',
                                           configuration: const IconConfiguration(icon: Icons.done),
+                                            backgroundColor: Colors.green
                                         );
                                         setState(() {
                                           roundNumber++;
-                                          _atual = _quizes[roundNumber + 1];
+                                          _atual = _quizes[roundNumber - 1];
                                         });
                                       } else {
                                       }

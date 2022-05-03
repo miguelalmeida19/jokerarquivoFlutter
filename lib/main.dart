@@ -18,8 +18,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 30;
 
-  void _comecar() {}
-
   @override
   Widget build(BuildContext context) {
     SizedBox espaco = const SizedBox(
