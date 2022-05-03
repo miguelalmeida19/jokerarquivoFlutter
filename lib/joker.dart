@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:animated_button/animated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:giffy_dialog/giffy_dialog.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jokerarquivo/questions.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:status_alert/status_alert.dart';
 
 class Joker extends StatefulWidget {
   const Joker({Key? key}) : super(key: key);
@@ -17,12 +17,24 @@ class Joker extends StatefulWidget {
 
 class _JokerState extends State<Joker> {
   late Quiz _quiz;
+  late List<Quiz> _quizes = [];
+  late Quiz _atual;
   bool isLoading = false;
   int roundNumber = 1;
   int maxRound = 12;
 
   Future<Quiz> buildQuiz() async {
     return await getQuiz();
+  }
+
+  Future<void> buildQuizes() async {
+    List<Quiz> list = [];
+    for (int i = 0; i < 15; i++) {
+      list.add(await getQuiz());
+      setState(() {
+        _quizes = list;
+      });
+    }
   }
 
   @override
@@ -33,8 +45,11 @@ class _JokerState extends State<Joker> {
       setState(() {
         _quiz = results;
         isLoading = true;
+        _atual = results;
       });
     });
+
+    buildQuizes();
   }
 
   @override
@@ -145,7 +160,7 @@ class _JokerState extends State<Joker> {
                                   width: 650,
                                   child: Flexible(
                                       child: SelectableText(
-                                    _quiz.pergunta!,
+                                    _atual.pergunta!,
                                     style: GoogleFonts.getFont(
                                       'IBM Plex Sans Thai',
                                       fontSize: 25,
@@ -174,7 +189,7 @@ class _JokerState extends State<Joker> {
                                     width: 250,
                                     color: const Color(0xFF647AEA),
                                     child: Text(
-                                      _quiz.opcoes![0],
+                                      _atual.opcoes![0],
                                       style: GoogleFonts.getFont(
                                         'IBM Plex Sans Thai',
                                         fontSize: 15,
@@ -186,68 +201,21 @@ class _JokerState extends State<Joker> {
                                       textAlign: TextAlign.center,
                                     ),
                                     onPressed: () {
-                                      if (_quiz.opcoes![0] ==
-                                          _quiz.respostaCerta!) {
-                                        showDialog(
-                                            context: context,
-                                            builder: (_) => AssetGiffyDialog(
-                                                  image: Image.network(
-                                                      'https://media2.giphy.com/media/t1i8KZ7momVs4/giphy.gif?cid=790b76112832f130a1a63a4f74636c142d0b8c6c8d2ba9d2&rid=giphy.gif&ct=g'),
-                                                  title: Text(
-                                                    'Resposta Correta!',
-                                                    style: TextStyle(
-                                                        fontSize: 22.0,
-                                                        fontWeight:
-                                                            FontWeight.w600),
-                                                  ),
-                                                  description: Text(
-                                                    'Continua! Estás a sair-te bem!',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(),
-                                                  ),
-                                                  entryAnimation:
-                                                      EntryAnimation.RIGHT,
-                                                  onOkButtonPressed: () {
-                                                    setState(() {
-                                                      roundNumber++;
-                                                      buildQuiz().then((results) {
-                                                        setState(() {
-                                                          _quiz = results;
-                                                          isLoading = true;
-                                                        });
-                                                      });
-                                                    });
-                                                  },
-                                                ));
-                                      } else {
-                                        showDialog(
-                                            context: context,
-                                            builder: (_) => AssetGiffyDialog(
-                                                  image: Image.network(
-                                                      "https://media4.giphy.com/media/m8eIbBdkJK7Go/giphy.gif?cid=ecf05e47psphxdrgi5r12w9gol4cl1gyck9ws87fcanw0bgy&rid=giphy.gif&ct=g"),
-                                                  title: Text(
-                                                    'Resposta Errada!',
-                                                    style: TextStyle(
-                                                        fontSize: 22.0,
-                                                        fontWeight:
-                                                            FontWeight.w600),
-                                                  ),
-                                                  description: Text(
-                                                    'Mais sorte para a próxima talvez...',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(),
-                                                  ),
-                                                  entryAnimation:
-                                                      EntryAnimation.RIGHT,
-                                                  onOkButtonPressed: () {
-                                                    setState(() {
-                                                      roundNumber++;
-                                                      build(context);
-                                                    });
-                                                  },
-                                                ));
-                                        sleep(Duration(seconds: 2));
+                                      if (_atual.opcoes![0] ==
+                                          _atual.respostaCerta!) {
+                                        StatusAlert.show(
+                                          context,
+                                          duration: const Duration(seconds: 2),
+                                          title: 'A sua resposta está ... CERTAAAAA!',
+                                          configuration: const IconConfiguration(icon: Icons.done),
+                                        );
+                                        setState(() {
+                                          roundNumber++;
+                                          _atual = _quizes[roundNumber + 1];
+                                        });
                                         build(context);
+                                      } else {
+
                                       }
                                     },
                                   ),
@@ -256,7 +224,7 @@ class _JokerState extends State<Joker> {
                                     width: 250,
                                     color: const Color(0xFF647AEA),
                                     child: Text(
-                                      _quiz.opcoes![1],
+                                      _atual.opcoes![1],
                                       style: GoogleFonts.getFont(
                                         'IBM Plex Sans Thai',
                                         fontSize: 15,
@@ -268,63 +236,19 @@ class _JokerState extends State<Joker> {
                                       textAlign: TextAlign.center,
                                     ),
                                     onPressed: () {
-                                      if (_quiz.opcoes![1] ==
-                                          _quiz.respostaCerta!) {
-                                        showDialog(
-                                            context: context,
-                                            builder: (_) => AssetGiffyDialog(
-                                                  image: Image.network(
-                                                      'https://media2.giphy.com/media/t1i8KZ7momVs4/giphy.gif?cid=790b76112832f130a1a63a4f74636c142d0b8c6c8d2ba9d2&rid=giphy.gif&ct=g'),
-                                                  title: Text(
-                                                    'Resposta Correta!',
-                                                    style: TextStyle(
-                                                        fontSize: 22.0,
-                                                        fontWeight:
-                                                            FontWeight.w600),
-                                                  ),
-                                                  description: Text(
-                                                    'Continua! Estás a sair-te bem!',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(),
-                                                  ),
-                                                  entryAnimation:
-                                                      EntryAnimation.RIGHT,
-                                                  onOkButtonPressed: () {
-                                                    setState(() {
-                                                      roundNumber++;
-                                                    });
-                                                    build(context);
-                                                  },
-                                                ));
+                                      if (_atual.opcoes![1] ==
+                                          _atual.respostaCerta!) {
+                                        StatusAlert.show(
+                                          context,
+                                          duration: const Duration(seconds: 2),
+                                          title: 'A sua resposta está ... CERTAAAAA!',
+                                          configuration: const IconConfiguration(icon: Icons.done),
+                                        );
+                                        setState(() {
+                                          roundNumber++;
+                                          _atual = _quizes[roundNumber + 1];
+                                        });
                                       } else {
-                                        showDialog(
-                                            context: context,
-                                            builder: (_) => AssetGiffyDialog(
-                                                  image: Image.network(
-                                                      "https://media4.giphy.com/media/m8eIbBdkJK7Go/giphy.gif?cid=ecf05e47psphxdrgi5r12w9gol4cl1gyck9ws87fcanw0bgy&rid=giphy.gif&ct=g"),
-                                                  title: Text(
-                                                    'Resposta Errada!',
-                                                    style: TextStyle(
-                                                        fontSize: 22.0,
-                                                        fontWeight:
-                                                            FontWeight.w600),
-                                                  ),
-                                                  description: Text(
-                                                    'Mais sorte para a próxima talvez...',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(),
-                                                  ),
-                                                  entryAnimation:
-                                                      EntryAnimation.RIGHT,
-                                                  onOkButtonPressed: () {
-                                                    setState(() {
-                                                      roundNumber++;
-                                                    });
-                                                    build(context);
-                                                  },
-                                                ));
-                                        sleep(Duration(seconds: 2));
-                                        build(context);
                                       }
                                     },
                                   ),
@@ -333,7 +257,7 @@ class _JokerState extends State<Joker> {
                                     width: 250,
                                     color: const Color(0xFF647AEA),
                                     child: Text(
-                                      _quiz.opcoes![2],
+                                      _atual.opcoes![2],
                                       style: GoogleFonts.getFont(
                                         'IBM Plex Sans Thai',
                                         fontSize: 15,
@@ -345,63 +269,19 @@ class _JokerState extends State<Joker> {
                                       textAlign: TextAlign.center,
                                     ),
                                     onPressed: () {
-                                      if (_quiz.opcoes![2] ==
-                                          _quiz.respostaCerta!) {
-                                        showDialog(
-                                            context: context,
-                                            builder: (_) => AssetGiffyDialog(
-                                                  image: Image.network(
-                                                      'https://media2.giphy.com/media/t1i8KZ7momVs4/giphy.gif?cid=790b76112832f130a1a63a4f74636c142d0b8c6c8d2ba9d2&rid=giphy.gif&ct=g'),
-                                                  title: Text(
-                                                    'Resposta Correta!',
-                                                    style: TextStyle(
-                                                        fontSize: 22.0,
-                                                        fontWeight:
-                                                            FontWeight.w600),
-                                                  ),
-                                                  description: Text(
-                                                    'Continua! Estás a sair-te bem!',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(),
-                                                  ),
-                                                  entryAnimation:
-                                                      EntryAnimation.RIGHT,
-                                                  onOkButtonPressed: () {
-                                                    setState(() {
-                                                      roundNumber++;
-                                                    });
-                                                    build(context);
-                                                  },
-                                                ));
+                                      if (_atual.opcoes![2] ==
+                                          _atual.respostaCerta!) {
+                                        StatusAlert.show(
+                                          context,
+                                          duration: const Duration(seconds: 2),
+                                          title: 'A sua resposta está ... CERTAAAAA!',
+                                          configuration: const IconConfiguration(icon: Icons.done),
+                                        );
+                                        setState(() {
+                                          roundNumber++;
+                                          _atual = _quizes[roundNumber + 1];
+                                        });
                                       } else {
-                                        showDialog(
-                                            context: context,
-                                            builder: (_) => AssetGiffyDialog(
-                                                  image: Image.network(
-                                                      "https://media4.giphy.com/media/m8eIbBdkJK7Go/giphy.gif?cid=ecf05e47psphxdrgi5r12w9gol4cl1gyck9ws87fcanw0bgy&rid=giphy.gif&ct=g"),
-                                                  title: Text(
-                                                    'Resposta Errada!',
-                                                    style: TextStyle(
-                                                        fontSize: 22.0,
-                                                        fontWeight:
-                                                            FontWeight.w600),
-                                                  ),
-                                                  description: Text(
-                                                    'Mais sorte para a próxima talvez...',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(),
-                                                  ),
-                                                  entryAnimation:
-                                                      EntryAnimation.RIGHT,
-                                                  onOkButtonPressed: () {
-                                                    setState(() {
-                                                      roundNumber++;
-                                                    });
-                                                    build(context);
-                                                  },
-                                                ));
-                                        sleep(Duration(seconds: 2));
-                                        build(context);
                                       }
                                     },
                                   ),
@@ -410,7 +290,7 @@ class _JokerState extends State<Joker> {
                                     width: 250,
                                     color: const Color(0xFF647AEA),
                                     child: Text(
-                                      _quiz.opcoes![3],
+                                      _atual.opcoes![3],
                                       style: GoogleFonts.getFont(
                                         'IBM Plex Sans Thai',
                                         fontSize: 15,
@@ -422,63 +302,19 @@ class _JokerState extends State<Joker> {
                                       textAlign: TextAlign.center,
                                     ),
                                     onPressed: () {
-                                      if (_quiz.opcoes![3] ==
-                                          _quiz.respostaCerta!) {
-                                        showDialog(
-                                            context: context,
-                                            builder: (_) => AssetGiffyDialog(
-                                                  image: Image.network(
-                                                      'https://media2.giphy.com/media/t1i8KZ7momVs4/giphy.gif?cid=790b76112832f130a1a63a4f74636c142d0b8c6c8d2ba9d2&rid=giphy.gif&ct=g'),
-                                                  title: Text(
-                                                    'Resposta Correta!',
-                                                    style: TextStyle(
-                                                        fontSize: 22.0,
-                                                        fontWeight:
-                                                            FontWeight.w600),
-                                                  ),
-                                                  description: Text(
-                                                    'Continua! Estás a sair-te bem!',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(),
-                                                  ),
-                                                  entryAnimation:
-                                                      EntryAnimation.RIGHT,
-                                                  onOkButtonPressed: () {
-                                                    setState(() {
-                                                      roundNumber++;
-                                                    });
-                                                    build(context);
-                                                  },
-                                                ));
+                                      if (_atual.opcoes![3] ==
+                                          _atual.respostaCerta!) {
+                                        StatusAlert.show(
+                                          context,
+                                          duration: const Duration(seconds: 2),
+                                          title: 'A sua resposta está ... CERTAAAAA!',
+                                          configuration: const IconConfiguration(icon: Icons.done),
+                                        );
+                                        setState(() {
+                                          roundNumber++;
+                                          _atual = _quizes[roundNumber + 1];
+                                        });
                                       } else {
-                                        showDialog(
-                                            context: context,
-                                            builder: (_) => AssetGiffyDialog(
-                                                  image: Image.network(
-                                                      "https://media4.giphy.com/media/m8eIbBdkJK7Go/giphy.gif?cid=ecf05e47psphxdrgi5r12w9gol4cl1gyck9ws87fcanw0bgy&rid=giphy.gif&ct=g"),
-                                                  title: Text(
-                                                    'Resposta Errada!',
-                                                    style: TextStyle(
-                                                        fontSize: 22.0,
-                                                        fontWeight:
-                                                            FontWeight.w600),
-                                                  ),
-                                                  description: Text(
-                                                    'Mais sorte para a próxima talvez...',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(),
-                                                  ),
-                                                  entryAnimation:
-                                                      EntryAnimation.RIGHT,
-                                                  onOkButtonPressed: () {
-                                                    setState(() {
-                                                      roundNumber++;
-                                                    });
-                                                    build(context);
-                                                  },
-                                                ));
-                                        sleep(Duration(seconds: 2));
-                                        build(context);
                                       }
                                     },
                                   ),

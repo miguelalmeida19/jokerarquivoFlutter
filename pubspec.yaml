@@ -27,7 +27,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  giffy_dialog: ^1.8.0
+  status_alert: ^1.0.0
   loading_animation_widget: ^1.1.0+5
   random_words: ^1.0.2
   http: ^0.13.4
