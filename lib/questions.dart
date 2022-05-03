@@ -1,9 +1,8 @@
 import 'dart:convert';
-import 'dart:convert' as convert;
 import 'dart:math';
-import 'package:random_words/random_words.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:random_words/random_words.dart';
 
 Future<Map<String, String>> execute() async {
   String phrase = await Questions.getPhrase();
@@ -23,11 +22,11 @@ Future<Map<String, String>> execute() async {
   }
 }
 
-Future<void> main() async{
+Future<void> main() async {
   Quiz quiz = await getQuiz();
-  print(quiz._pergunta);
-  print(quiz._respostaCerta);
-  print(quiz._opcoes);
+  print(quiz.pergunta);
+  print(quiz.respostaCerta);
+  print(quiz.opcoes);
 }
 
 Future<Quiz> getQuiz() async {
@@ -119,7 +118,7 @@ Future<Quiz> getQuiz() async {
 
     Map<String, String> mapoFinal = {};
 
-    for (int i = 0; i<6; i++){
+    for (int i = 0; i < 6; i++) {
       Map<String, String> mapo = await execute();
       mapoFinal.addAll(mapo);
     }
@@ -128,12 +127,12 @@ Future<Quiz> getQuiz() async {
     //Encontrar tipo mais frequente
     Map<String, List<MapEntry<String, String>>> frequency = {};
 
-    for (var s in mapoFinal.entries){
-      for (var g in matching.keys){
-        if (s.key.contains(g.toLowerCase())){
-          if (frequency[g.toLowerCase()] == null){
+    for (var s in mapoFinal.entries) {
+      for (var g in matching.keys) {
+        if (s.key.contains(g.toLowerCase())) {
+          if (frequency[g.toLowerCase()] == null) {
             frequency[g.toLowerCase()] = [s];
-          }else {
+          } else {
             frequency[g.toLowerCase()]?.add(s);
           }
         }
@@ -145,8 +144,8 @@ Future<Quiz> getQuiz() async {
     Map<String, List<String>> mapaFinal = {};
     List<MapEntry<String, List<MapEntry<String, String>>>> possible = [];
 
-    for (var l in frequency.entries){
-      if (l.value.length>=4){
+    for (var l in frequency.entries) {
+      if (l.value.length >= 4) {
         possible.add(l);
         //mapaFinal[l.value.first.key] = [l.value.first.value, l.value[1].value, l.value[2].value, l.value[3].value];
       }
@@ -154,30 +153,40 @@ Future<Quiz> getQuiz() async {
 
     String certa = "";
 
-    if (possible.length>1){
-      int max = possible.length-1;
+    if (possible.length > 1) {
+      int max = possible.length - 1;
 
       int randomNumber = Random().nextInt(max);
 
-      MapEntry<String, List<MapEntry<String, String>>> l = possible[randomNumber];
+      MapEntry<String, List<MapEntry<String, String>>> l =
+          possible[randomNumber];
       certa = l.value.first.value;
-      mapaFinal[l.value.first.key] = [l.value.first.value, l.value[1].value, l.value[2].value, l.value[3].value];
-
-    }if (possible.length==1) {
+      mapaFinal[l.value.first.key] = [
+        l.value.first.value,
+        l.value[1].value,
+        l.value[2].value,
+        l.value[3].value
+      ];
+    }
+    if (possible.length == 1) {
       MapEntry<String, List<MapEntry<String, String>>> l = possible.first;
       certa = l.value.first.value;
-      mapaFinal[l.value.first.key] = [l.value.first.value, l.value[1].value, l.value[2].value, l.value[3].value];
+      mapaFinal[l.value.first.key] = [
+        l.value.first.value,
+        l.value[1].value,
+        l.value[2].value,
+        l.value[3].value
+      ];
     }
 
     print("\n\nPergunta: " + mapaFinal.keys.first);
-    for (int k=0; k<4; k++){
-      print((k+1).toString() + " - " + mapaFinal.values.first[k]);
+    for (int k = 0; k < 4; k++) {
+      print((k + 1).toString() + " - " + mapaFinal.values.first[k]);
     }
 
     Quiz quiz = Quiz(certa, mapaFinal.values.first, mapaFinal.keys.first);
     return quiz;
-
-  }catch(e){
+  } catch (e) {
     return getQuiz();
   }
 }
@@ -313,7 +322,11 @@ class Questions {
             String question = "";
             if (v == i) {
               for (int j = 0; j < counter; j++) {
-                question += " " + list_words[j];
+                if (j > 0) {
+                  question += " " + list_words[j];
+                } else {
+                  question += list_words[j];
+                }
               }
               question += " " + entry.key.toLowerCase();
 
@@ -370,22 +383,21 @@ class Questions {
     List<dynamic> lista = list["response_items"];
     String res = lista[0]["title"];
     res = res.split(" | ")[0];
-    if (res.contains(" - PÚBLICO")){
+    if (res.contains(" - PÚBLICO")) {
       res = res.replaceAll(" - PÚBLICO", "");
     }
     return res;
   }
 }
 
-class Quiz{
-  String? _respostaCerta;
-  List<String>? _opcoes;
-  String? _pergunta;
+class Quiz {
+  String? respostaCerta;
+  List<String>? opcoes;
+  String? pergunta;
 
-
-  Quiz(String respostaCerta, List<String> opcoes, String pergunta){
-    this._respostaCerta = respostaCerta;
-    this._opcoes = opcoes;
-    this._pergunta = pergunta;
+  Quiz(String respostaCerta, List<String> opcoes, String pergunta) {
+    this.respostaCerta = respostaCerta;
+    this.opcoes = opcoes;
+    this.pergunta = pergunta;
   }
 }
