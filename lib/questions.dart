@@ -5,21 +5,180 @@ import 'package:random_words/random_words.dart';
 
 import 'package:http/http.dart' as http;
 
-Future<void> main() async {
+Future<Map<String, String>> execute() async {
   String phrase = await Questions.getPhrase();
   try {
     if (phrase != "") {
       Map<String, String> map = Questions.buildQuestion(phrase);
       if (map.isEmpty) {
-        main();
+        return execute();
       } else {
-        print(map);
+        return map;
       }
     } else {
-      main();
+      return execute();
     }
   } catch (e) {
-    main();
+    return execute();
+  }
+}
+
+Future<void> main() async{
+  Quiz quiz = await getQuiz();
+  print(quiz._pergunta);
+  print(quiz._respostaCerta);
+  print(quiz._opcoes);
+}
+
+Future<Quiz> getQuiz() async {
+  try {
+    Map<String, List<String>> matching = {
+      'QUANDO?': [
+        "em",
+        "hoje",
+        "já",
+        "afinal",
+        "logo",
+        "agora",
+        "amanhã",
+        "amiúde",
+        "antes",
+        "ontem",
+        "tarde",
+        "breve",
+        "cedo",
+        "depois",
+        "nunca",
+        "sempre",
+        "doravante",
+        "primeiramente",
+        "imediatamente",
+        "antigamente",
+        "provisoriamente",
+        "sucessivamente",
+        "constantemente",
+        "na"
+      ],
+      'ONDE?': [
+        "debaixo",
+        "em cima",
+        "ali",
+        "aqui",
+        "além",
+        "abaixo",
+        "aquém",
+        "lá",
+        "fora",
+        "dentro",
+        "acima",
+        "diante",
+        "atrás",
+        "longe",
+        "perto",
+        "defronte",
+        "algures",
+        "cá",
+        "nenhures",
+        "adentro",
+        "aquém",
+        "externamente",
+        "em"
+      ],
+      'O QUÊ?': ["a"],
+      'DE QUÊ?': ["de", "da"],
+      'DE QUEM?': ["de"],
+      'QUEM?': ["um", "uma", "o", "os", "a", "as"],
+      'DATA?': [
+        "janeiro",
+        "fevereiro",
+        "março",
+        "abril",
+        "maio",
+        "junho",
+        "julho",
+        "agosto",
+        "setembro",
+        "outubro",
+        "novembro",
+        "dezembro"
+      ],
+      'A ONDE?': ["à"],
+      'PARA O QUÊ?': ["para"],
+      'DO QUÊ?': ["do"],
+      'E QUEM?': ["e"],
+      'COMO QUEM?': ["como"],
+      'POR ONDE?': ["pela", "pelo"],
+      'OU O QUÊ?': ["ou"],
+      'PELO QUÊ?': ["pela", "pelo", "por"],
+      'EM QUÊ?': ["nas", "nos", "na", "no"],
+      'E O QUÊ?': ["e"],
+      "MAS O QUÊ?": ["mas"],
+      "QUER O QUÊ?": ["quer"],
+      "É O QUÊ?": ["é"]
+    };
+
+    Map<String, String> mapoFinal = {};
+
+    for (int i = 0; i<6; i++){
+      Map<String, String> mapo = await execute();
+      mapoFinal.addAll(mapo);
+    }
+    //print(mapoFinal);
+
+    //Encontrar tipo mais frequente
+    Map<String, List<MapEntry<String, String>>> frequency = {};
+
+    for (var s in mapoFinal.entries){
+      for (var g in matching.keys){
+        if (s.key.contains(g.toLowerCase())){
+          if (frequency[g.toLowerCase()] == null){
+            frequency[g.toLowerCase()] = [s];
+          }else {
+            frequency[g.toLowerCase()]?.add(s);
+          }
+        }
+      }
+    }
+
+    //Seleção da pergunta e opções
+
+    Map<String, List<String>> mapaFinal = {};
+    List<MapEntry<String, List<MapEntry<String, String>>>> possible = [];
+
+    for (var l in frequency.entries){
+      if (l.value.length>=4){
+        possible.add(l);
+        //mapaFinal[l.value.first.key] = [l.value.first.value, l.value[1].value, l.value[2].value, l.value[3].value];
+      }
+    }
+
+    String certa = "";
+
+    if (possible.length>1){
+      int max = possible.length-1;
+
+      int randomNumber = Random().nextInt(max);
+
+      MapEntry<String, List<MapEntry<String, String>>> l = possible[randomNumber];
+      certa = l.value.first.value;
+      mapaFinal[l.value.first.key] = [l.value.first.value, l.value[1].value, l.value[2].value, l.value[3].value];
+
+    }if (possible.length==1) {
+      MapEntry<String, List<MapEntry<String, String>>> l = possible.first;
+      certa = l.value.first.value;
+      mapaFinal[l.value.first.key] = [l.value.first.value, l.value[1].value, l.value[2].value, l.value[3].value];
+    }
+
+    print("\n\nPergunta: " + mapaFinal.keys.first);
+    for (int k=0; k<4; k++){
+      print((k+1).toString() + " - " + mapaFinal.values.first[k]);
+    }
+
+    Quiz quiz = Quiz(certa, mapaFinal.values.first, mapaFinal.keys.first);
+    return quiz;
+
+  }catch(e){
+    return getQuiz();
   }
 }
 
@@ -204,13 +363,29 @@ class Questions {
 
     final response = await http.get(Uri.parse('https://arquivo.pt/textsearch?q=' +
         word +
-        "&maxItems=1&prettyPrint=true&from=20190101000000&siteSearch=http://www.publico.pt"));
+        "&maxItems=1&prettyPrint=true&from=20150101000000&siteSearch=http://www.publico.pt"));
 
     String source = (Utf8Decoder().convert(response.bodyBytes));
     Map<String, dynamic> list = json.decode(source);
     List<dynamic> lista = list["response_items"];
     String res = lista[0]["title"];
     res = res.split(" | ")[0];
+    if (res.contains(" - PÚBLICO")){
+      res = res.replaceAll(" - PÚBLICO", "");
+    }
     return res;
+  }
+}
+
+class Quiz{
+  String? _respostaCerta;
+  List<String>? _opcoes;
+  String? _pergunta;
+
+
+  Quiz(String respostaCerta, List<String> opcoes, String pergunta){
+    this._respostaCerta = respostaCerta;
+    this._opcoes = opcoes;
+    this._pergunta = pergunta;
   }
 }
