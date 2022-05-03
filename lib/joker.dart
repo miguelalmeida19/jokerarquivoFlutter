@@ -18,6 +18,8 @@ class Joker extends StatefulWidget {
 class _JokerState extends State<Joker> {
   late Quiz _quiz;
   bool isLoading = false;
+  int roundNumber = 1;
+  int maxRound = 12;
 
   Future<Quiz> buildQuiz() async {
     return await getQuiz();
@@ -101,7 +103,7 @@ class _JokerState extends State<Joker> {
                                             MainAxisAlignment.center,
                                         children: [
                                           Text(
-                                            '1',
+                                            roundNumber.toString(),
                                             style: GoogleFonts.getFont(
                                               'IBM Plex Sans Thai',
                                               fontSize: 22,
@@ -120,7 +122,7 @@ class _JokerState extends State<Joker> {
                                             color: Colors.white,
                                           ),
                                           Text(
-                                            '12',
+                                            maxRound.toString(),
                                             style: GoogleFonts.getFont(
                                               'IBM Plex Sans Thai',
                                               fontSize: 17,
@@ -184,36 +186,66 @@ class _JokerState extends State<Joker> {
                                       textAlign: TextAlign.center,
                                     ),
                                     onPressed: () {
-                                      if (_quiz.opcoes![0]==_quiz.respostaCerta!){
+                                      if (_quiz.opcoes![0] ==
+                                          _quiz.respostaCerta!) {
                                         showDialog(
-                                            context: context,builder: (_) => AssetGiffyDialog(
-                                          image: Image.network('https://media2.giphy.com/media/t1i8KZ7momVs4/giphy.gif?cid=790b76112832f130a1a63a4f74636c142d0b8c6c8d2ba9d2&rid=giphy.gif&ct=g'),
-                                          title: Text('Resposta Correta!',
-                                            style: TextStyle(
-                                                fontSize: 22.0, fontWeight: FontWeight.w600),
-                                          ),
-                                          description: Text('Continua! Estás a sair-te bem!',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(),
-                                          ),
-                                          entryAnimation: EntryAnimation.RIGHT,
-                                          onOkButtonPressed: () {},
-                                        ) );
-                                      }else {
+                                            context: context,
+                                            builder: (_) => AssetGiffyDialog(
+                                                  image: Image.network(
+                                                      'https://media2.giphy.com/media/t1i8KZ7momVs4/giphy.gif?cid=790b76112832f130a1a63a4f74636c142d0b8c6c8d2ba9d2&rid=giphy.gif&ct=g'),
+                                                  title: Text(
+                                                    'Resposta Correta!',
+                                                    style: TextStyle(
+                                                        fontSize: 22.0,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                  description: Text(
+                                                    'Continua! Estás a sair-te bem!',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(),
+                                                  ),
+                                                  entryAnimation:
+                                                      EntryAnimation.RIGHT,
+                                                  onOkButtonPressed: () {
+                                                    setState(() {
+                                                      roundNumber++;
+                                                      buildQuiz().then((results) {
+                                                        setState(() {
+                                                          _quiz = results;
+                                                          isLoading = true;
+                                                        });
+                                                      });
+                                                    });
+                                                  },
+                                                ));
+                                      } else {
                                         showDialog(
-                                            context: context,builder: (_) => AssetGiffyDialog(
-                                          image: Image.network("https://media4.giphy.com/media/m8eIbBdkJK7Go/giphy.gif?cid=ecf05e47psphxdrgi5r12w9gol4cl1gyck9ws87fcanw0bgy&rid=giphy.gif&ct=g"),
-                                          title: Text('Resposta Errada!',
-                                            style: TextStyle(
-                                                fontSize: 22.0, fontWeight: FontWeight.w600),
-                                          ),
-                                          description: Text('Mais sorte para a próxima talvez...',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(),
-                                          ),
-                                          entryAnimation: EntryAnimation.RIGHT,
-                                          onOkButtonPressed: () {},
-                                        ) );
+                                            context: context,
+                                            builder: (_) => AssetGiffyDialog(
+                                                  image: Image.network(
+                                                      "https://media4.giphy.com/media/m8eIbBdkJK7Go/giphy.gif?cid=ecf05e47psphxdrgi5r12w9gol4cl1gyck9ws87fcanw0bgy&rid=giphy.gif&ct=g"),
+                                                  title: Text(
+                                                    'Resposta Errada!',
+                                                    style: TextStyle(
+                                                        fontSize: 22.0,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                  description: Text(
+                                                    'Mais sorte para a próxima talvez...',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(),
+                                                  ),
+                                                  entryAnimation:
+                                                      EntryAnimation.RIGHT,
+                                                  onOkButtonPressed: () {
+                                                    setState(() {
+                                                      roundNumber++;
+                                                      build(context);
+                                                    });
+                                                  },
+                                                ));
                                         sleep(Duration(seconds: 2));
                                         build(context);
                                       }
@@ -236,36 +268,61 @@ class _JokerState extends State<Joker> {
                                       textAlign: TextAlign.center,
                                     ),
                                     onPressed: () {
-                                      if (_quiz.opcoes![1]==_quiz.respostaCerta!){
+                                      if (_quiz.opcoes![1] ==
+                                          _quiz.respostaCerta!) {
                                         showDialog(
-                                            context: context,builder: (_) => AssetGiffyDialog(
-                                          image: Image.network('https://media2.giphy.com/media/t1i8KZ7momVs4/giphy.gif?cid=790b76112832f130a1a63a4f74636c142d0b8c6c8d2ba9d2&rid=giphy.gif&ct=g'),
-                                          title: Text('Resposta Correta!',
-                                            style: TextStyle(
-                                                fontSize: 22.0, fontWeight: FontWeight.w600),
-                                          ),
-                                          description: Text('Continua! Estás a sair-te bem!',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(),
-                                          ),
-                                          entryAnimation: EntryAnimation.RIGHT,
-                                          onOkButtonPressed: () {},
-                                        ) );
-                                      }else {
+                                            context: context,
+                                            builder: (_) => AssetGiffyDialog(
+                                                  image: Image.network(
+                                                      'https://media2.giphy.com/media/t1i8KZ7momVs4/giphy.gif?cid=790b76112832f130a1a63a4f74636c142d0b8c6c8d2ba9d2&rid=giphy.gif&ct=g'),
+                                                  title: Text(
+                                                    'Resposta Correta!',
+                                                    style: TextStyle(
+                                                        fontSize: 22.0,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                  description: Text(
+                                                    'Continua! Estás a sair-te bem!',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(),
+                                                  ),
+                                                  entryAnimation:
+                                                      EntryAnimation.RIGHT,
+                                                  onOkButtonPressed: () {
+                                                    setState(() {
+                                                      roundNumber++;
+                                                    });
+                                                    build(context);
+                                                  },
+                                                ));
+                                      } else {
                                         showDialog(
-                                            context: context,builder: (_) => AssetGiffyDialog(
-                                          image: Image.network("https://media4.giphy.com/media/m8eIbBdkJK7Go/giphy.gif?cid=ecf05e47psphxdrgi5r12w9gol4cl1gyck9ws87fcanw0bgy&rid=giphy.gif&ct=g"),
-                                          title: Text('Resposta Errada!',
-                                            style: TextStyle(
-                                                fontSize: 22.0, fontWeight: FontWeight.w600),
-                                          ),
-                                          description: Text('Mais sorte para a próxima talvez...',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(),
-                                          ),
-                                          entryAnimation: EntryAnimation.RIGHT,
-                                          onOkButtonPressed: () {},
-                                        ) );
+                                            context: context,
+                                            builder: (_) => AssetGiffyDialog(
+                                                  image: Image.network(
+                                                      "https://media4.giphy.com/media/m8eIbBdkJK7Go/giphy.gif?cid=ecf05e47psphxdrgi5r12w9gol4cl1gyck9ws87fcanw0bgy&rid=giphy.gif&ct=g"),
+                                                  title: Text(
+                                                    'Resposta Errada!',
+                                                    style: TextStyle(
+                                                        fontSize: 22.0,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                  description: Text(
+                                                    'Mais sorte para a próxima talvez...',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(),
+                                                  ),
+                                                  entryAnimation:
+                                                      EntryAnimation.RIGHT,
+                                                  onOkButtonPressed: () {
+                                                    setState(() {
+                                                      roundNumber++;
+                                                    });
+                                                    build(context);
+                                                  },
+                                                ));
                                         sleep(Duration(seconds: 2));
                                         build(context);
                                       }
@@ -288,36 +345,61 @@ class _JokerState extends State<Joker> {
                                       textAlign: TextAlign.center,
                                     ),
                                     onPressed: () {
-                                      if (_quiz.opcoes![2]==_quiz.respostaCerta!){
+                                      if (_quiz.opcoes![2] ==
+                                          _quiz.respostaCerta!) {
                                         showDialog(
-                                            context: context,builder: (_) => AssetGiffyDialog(
-                                          image: Image.network('https://media2.giphy.com/media/t1i8KZ7momVs4/giphy.gif?cid=790b76112832f130a1a63a4f74636c142d0b8c6c8d2ba9d2&rid=giphy.gif&ct=g'),
-                                          title: Text('Resposta Correta!',
-                                            style: TextStyle(
-                                                fontSize: 22.0, fontWeight: FontWeight.w600),
-                                          ),
-                                          description: Text('Continua! Estás a sair-te bem!',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(),
-                                          ),
-                                          entryAnimation: EntryAnimation.RIGHT,
-                                          onOkButtonPressed: () {},
-                                        ) );
-                                      }else {
+                                            context: context,
+                                            builder: (_) => AssetGiffyDialog(
+                                                  image: Image.network(
+                                                      'https://media2.giphy.com/media/t1i8KZ7momVs4/giphy.gif?cid=790b76112832f130a1a63a4f74636c142d0b8c6c8d2ba9d2&rid=giphy.gif&ct=g'),
+                                                  title: Text(
+                                                    'Resposta Correta!',
+                                                    style: TextStyle(
+                                                        fontSize: 22.0,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                  description: Text(
+                                                    'Continua! Estás a sair-te bem!',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(),
+                                                  ),
+                                                  entryAnimation:
+                                                      EntryAnimation.RIGHT,
+                                                  onOkButtonPressed: () {
+                                                    setState(() {
+                                                      roundNumber++;
+                                                    });
+                                                    build(context);
+                                                  },
+                                                ));
+                                      } else {
                                         showDialog(
-                                            context: context,builder: (_) => AssetGiffyDialog(
-                                          image: Image.network("https://media4.giphy.com/media/m8eIbBdkJK7Go/giphy.gif?cid=ecf05e47psphxdrgi5r12w9gol4cl1gyck9ws87fcanw0bgy&rid=giphy.gif&ct=g"),
-                                          title: Text('Resposta Errada!',
-                                            style: TextStyle(
-                                                fontSize: 22.0, fontWeight: FontWeight.w600),
-                                          ),
-                                          description: Text('Mais sorte para a próxima talvez...',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(),
-                                          ),
-                                          entryAnimation: EntryAnimation.RIGHT,
-                                          onOkButtonPressed: () {},
-                                        ) );
+                                            context: context,
+                                            builder: (_) => AssetGiffyDialog(
+                                                  image: Image.network(
+                                                      "https://media4.giphy.com/media/m8eIbBdkJK7Go/giphy.gif?cid=ecf05e47psphxdrgi5r12w9gol4cl1gyck9ws87fcanw0bgy&rid=giphy.gif&ct=g"),
+                                                  title: Text(
+                                                    'Resposta Errada!',
+                                                    style: TextStyle(
+                                                        fontSize: 22.0,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                  description: Text(
+                                                    'Mais sorte para a próxima talvez...',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(),
+                                                  ),
+                                                  entryAnimation:
+                                                      EntryAnimation.RIGHT,
+                                                  onOkButtonPressed: () {
+                                                    setState(() {
+                                                      roundNumber++;
+                                                    });
+                                                    build(context);
+                                                  },
+                                                ));
                                         sleep(Duration(seconds: 2));
                                         build(context);
                                       }
@@ -340,36 +422,61 @@ class _JokerState extends State<Joker> {
                                       textAlign: TextAlign.center,
                                     ),
                                     onPressed: () {
-                                      if (_quiz.opcoes![3]==_quiz.respostaCerta!){
+                                      if (_quiz.opcoes![3] ==
+                                          _quiz.respostaCerta!) {
                                         showDialog(
-                                            context: context,builder: (_) => AssetGiffyDialog(
-                                          image: Image.network('https://media2.giphy.com/media/t1i8KZ7momVs4/giphy.gif?cid=790b76112832f130a1a63a4f74636c142d0b8c6c8d2ba9d2&rid=giphy.gif&ct=g'),
-                                          title: Text('Resposta Correta!',
-                                            style: TextStyle(
-                                                fontSize: 22.0, fontWeight: FontWeight.w600),
-                                          ),
-                                          description: Text('Continua! Estás a sair-te bem!',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(),
-                                          ),
-                                          entryAnimation: EntryAnimation.RIGHT,
-                                          onOkButtonPressed: () {},
-                                        ) );
-                                      }else {
+                                            context: context,
+                                            builder: (_) => AssetGiffyDialog(
+                                                  image: Image.network(
+                                                      'https://media2.giphy.com/media/t1i8KZ7momVs4/giphy.gif?cid=790b76112832f130a1a63a4f74636c142d0b8c6c8d2ba9d2&rid=giphy.gif&ct=g'),
+                                                  title: Text(
+                                                    'Resposta Correta!',
+                                                    style: TextStyle(
+                                                        fontSize: 22.0,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                  description: Text(
+                                                    'Continua! Estás a sair-te bem!',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(),
+                                                  ),
+                                                  entryAnimation:
+                                                      EntryAnimation.RIGHT,
+                                                  onOkButtonPressed: () {
+                                                    setState(() {
+                                                      roundNumber++;
+                                                    });
+                                                    build(context);
+                                                  },
+                                                ));
+                                      } else {
                                         showDialog(
-                                            context: context,builder: (_) => AssetGiffyDialog(
-                                          image: Image.network("https://media4.giphy.com/media/m8eIbBdkJK7Go/giphy.gif?cid=ecf05e47psphxdrgi5r12w9gol4cl1gyck9ws87fcanw0bgy&rid=giphy.gif&ct=g"),
-                                          title: Text('Resposta Errada!',
-                                            style: TextStyle(
-                                                fontSize: 22.0, fontWeight: FontWeight.w600),
-                                          ),
-                                          description: Text('Mais sorte para a próxima talvez...',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(),
-                                          ),
-                                          entryAnimation: EntryAnimation.RIGHT,
-                                          onOkButtonPressed: () {},
-                                        ) );
+                                            context: context,
+                                            builder: (_) => AssetGiffyDialog(
+                                                  image: Image.network(
+                                                      "https://media4.giphy.com/media/m8eIbBdkJK7Go/giphy.gif?cid=ecf05e47psphxdrgi5r12w9gol4cl1gyck9ws87fcanw0bgy&rid=giphy.gif&ct=g"),
+                                                  title: Text(
+                                                    'Resposta Errada!',
+                                                    style: TextStyle(
+                                                        fontSize: 22.0,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                  description: Text(
+                                                    'Mais sorte para a próxima talvez...',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(),
+                                                  ),
+                                                  entryAnimation:
+                                                      EntryAnimation.RIGHT,
+                                                  onOkButtonPressed: () {
+                                                    setState(() {
+                                                      roundNumber++;
+                                                    });
+                                                    build(context);
+                                                  },
+                                                ));
                                         sleep(Duration(seconds: 2));
                                         build(context);
                                       }
@@ -387,7 +494,8 @@ class _JokerState extends State<Joker> {
               )
             : Center(
                 child: LoadingAnimationWidget.horizontalRotatingDots(
-                size: 200, color: Colors.white,
+                size: 200,
+                color: Colors.white,
               )),
       ),
     );
