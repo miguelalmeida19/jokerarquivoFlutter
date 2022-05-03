@@ -395,9 +395,7 @@ class Quiz {
   List<String>? opcoes;
   String? pergunta;
 
-  Quiz(String respostaCerta, List<String> opcoes, String pergunta) {
-    this.respostaCerta = respostaCerta;
-    this.opcoes = opcoes;
-    this.pergunta = pergunta;
+  Quiz(this.respostaCerta, this.opcoes, this.pergunta) {
+    opcoes?.shuffle();
   }
 }

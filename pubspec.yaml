@@ -27,6 +27,9 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  timer_count_down: ^2.2.1
+  simple_timer: ^2.0.0
+  countdown_flutter: ^0.1.2
   status_alert: ^1.0.0
   loading_animation_widget: ^1.1.0+5
   random_words: ^1.0.2

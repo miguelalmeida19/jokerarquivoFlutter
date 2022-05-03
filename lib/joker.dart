@@ -7,6 +7,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:jokerarquivo/questions.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:status_alert/status_alert.dart';
+import 'package:timer_count_down/timer_controller.dart';
+import 'package:timer_count_down/timer_count_down.dart';
 
 class Joker extends StatefulWidget {
   const Joker({Key? key}) : super(key: key);
@@ -19,9 +21,12 @@ class _JokerState extends State<Joker> {
   late Quiz _quiz;
   late List<Quiz> _quizes = [];
   late Quiz _atual;
+  late Countdown countdown;
   bool isLoading = false;
   int roundNumber = 1;
   int maxRound = 12;
+
+  final CountdownController _controller = CountdownController(autoStart: true);
 
   Future<Quiz> buildQuiz() async {
     return await getQuiz();
@@ -43,6 +48,32 @@ class _JokerState extends State<Joker> {
     buildQuizes();
 
     buildQuiz().then((results) {
+      countdown = Countdown(
+        controller: _controller,
+        build: (_, double time) => Text(
+          time.toString(),
+          style: GoogleFonts.getFont(
+            'IBM Plex Sans Thai',
+            fontSize: 25,
+            textStyle: const TextStyle(
+              color: Colors.white,
+            ),
+            fontWeight: FontWeight.bold,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        onFinished: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Timer is done!'),
+            ),
+          );
+        },
+        seconds: 40,
+      );
+
+      _controller.start();
+
       setState(() {
         _quiz = results;
         isLoading = true;
@@ -53,6 +84,7 @@ class _JokerState extends State<Joker> {
 
   @override
   Widget build(BuildContext context) {
+    _controller.start();
     return NeumorphicApp(
       themeMode: ThemeMode.light,
       theme: const NeumorphicThemeData(
@@ -86,7 +118,7 @@ class _JokerState extends State<Joker> {
                     ),
                     SizedBox(
                       width: 800,
-                      height: 300,
+                      height: 330,
                       child: Neumorphic(
                         style: NeumorphicStyle(
                           color: const Color(0xFF4D62D0),
@@ -97,6 +129,24 @@ class _JokerState extends State<Joker> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                SizedBox(
+                                  width: 80,
+                                  child: Neumorphic(
+                                    style: NeumorphicStyle(
+                                      color: const Color(0xFF647AEA),
+                                      shape: NeumorphicShape.flat,
+                                      boxShape: NeumorphicBoxShape.roundRect(
+                                          BorderRadius.circular(5)),
+                                    ),
+                                    child: countdown,
+                                  ),
+                                ),
+                                const SizedBox(width: 15),
+                              ],
+                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -177,7 +227,7 @@ class _JokerState extends State<Joker> {
                               height: 20,
                             ),
                             SizedBox(
-                              width: 600,
+                              width: 800,
                               child: Wrap(
                                 spacing: 10,
                                 runSpacing: 10,
@@ -185,7 +235,7 @@ class _JokerState extends State<Joker> {
                                 children: [
                                   AnimatedButton(
                                     height: 70,
-                                    width: 250,
+                                    width: 300,
                                     color: const Color(0xFF647AEA),
                                     child: Text(
                                       _atual.opcoes![0],
@@ -200,28 +250,30 @@ class _JokerState extends State<Joker> {
                                       textAlign: TextAlign.center,
                                     ),
                                     onPressed: () {
+                                      _controller.pause();
                                       if (_atual.opcoes![0] ==
                                           _atual.respostaCerta!) {
-                                        StatusAlert.show(
-                                          context,
-                                          duration: const Duration(seconds: 2),
-                                          title: 'CERTAAAAA!',
-                                          configuration: const IconConfiguration(icon: Icons.done),
-                                          backgroundColor: Colors.green
+                                        StatusAlert.show(context,
+                                            duration:
+                                                const Duration(seconds: 2),
+                                            title: 'CERTAAAAA!',
+                                            configuration:
+                                                const IconConfiguration(
+                                                    icon: Icons.done),
+                                            backgroundColor: Colors.green
                                         );
                                         setState(() {
                                           roundNumber++;
                                           _atual = _quizes[roundNumber - 1];
+                                          _controller.restart();
                                         });
                                         build(context);
-                                      } else {
-
-                                      }
+                                      } else {}
                                     },
                                   ),
                                   AnimatedButton(
                                     height: 70,
-                                    width: 250,
+                                    width: 300,
                                     color: const Color(0xFF647AEA),
                                     child: Text(
                                       _atual.opcoes![1],
@@ -236,26 +288,29 @@ class _JokerState extends State<Joker> {
                                       textAlign: TextAlign.center,
                                     ),
                                     onPressed: () {
+                                      _controller.pause();
                                       if (_atual.opcoes![1] ==
                                           _atual.respostaCerta!) {
-                                        StatusAlert.show(
-                                          context,
-                                          duration: const Duration(seconds: 2),
-                                          title: 'CERTAAAAA!',
-                                          configuration: const IconConfiguration(icon: Icons.done),
-                                            backgroundColor: Colors.green
-                                        );
+                                        StatusAlert.show(context,
+                                            duration:
+                                                const Duration(seconds: 2),
+                                            title: 'CERTAAAAA!',
+                                            configuration:
+                                                const IconConfiguration(
+                                                    icon: Icons.done),
+                                            backgroundColor: Colors.green);
                                         setState(() {
                                           roundNumber++;
                                           _atual = _quizes[roundNumber - 1];
+                                          _controller.restart();
                                         });
-                                      } else {
-                                      }
+                                        build(context);
+                                      } else {}
                                     },
                                   ),
                                   AnimatedButton(
                                     height: 70,
-                                    width: 250,
+                                    width: 300,
                                     color: const Color(0xFF647AEA),
                                     child: Text(
                                       _atual.opcoes![2],
@@ -270,26 +325,29 @@ class _JokerState extends State<Joker> {
                                       textAlign: TextAlign.center,
                                     ),
                                     onPressed: () {
+                                      _controller.pause();
                                       if (_atual.opcoes![2] ==
                                           _atual.respostaCerta!) {
-                                        StatusAlert.show(
-                                          context,
-                                          duration: const Duration(seconds: 2),
-                                          title: 'CERTAAAAA!',
-                                          configuration: const IconConfiguration(icon: Icons.done),
-                                            backgroundColor: Colors.green
-                                        );
+                                        StatusAlert.show(context,
+                                            duration:
+                                                const Duration(seconds: 2),
+                                            title: 'CERTAAAAA!',
+                                            configuration:
+                                                const IconConfiguration(
+                                                    icon: Icons.done),
+                                            backgroundColor: Colors.green);
                                         setState(() {
                                           roundNumber++;
                                           _atual = _quizes[roundNumber - 1];
+                                          _controller.restart();
                                         });
-                                      } else {
-                                      }
+                                        build(context);
+                                      } else {}
                                     },
                                   ),
                                   AnimatedButton(
                                     height: 70,
-                                    width: 250,
+                                    width: 300,
                                     color: const Color(0xFF647AEA),
                                     child: Text(
                                       _atual.opcoes![3],
@@ -304,21 +362,24 @@ class _JokerState extends State<Joker> {
                                       textAlign: TextAlign.center,
                                     ),
                                     onPressed: () {
+                                      _controller.pause();
                                       if (_atual.opcoes![3] ==
                                           _atual.respostaCerta!) {
-                                        StatusAlert.show(
-                                          context,
-                                          duration: const Duration(seconds: 2),
-                                          title: 'CERTAAAAA!',
-                                          configuration: const IconConfiguration(icon: Icons.done),
-                                            backgroundColor: Colors.green
-                                        );
+                                        StatusAlert.show(context,
+                                            duration:
+                                                const Duration(seconds: 2),
+                                            title: 'CERTAAAAA!',
+                                            configuration:
+                                                const IconConfiguration(
+                                                    icon: Icons.done),
+                                            backgroundColor: Colors.green);
                                         setState(() {
                                           roundNumber++;
                                           _atual = _quizes[roundNumber - 1];
+                                          _controller.restart();
                                         });
-                                      } else {
-                                      }
+                                        build(context);
+                                      } else {}
                                     },
                                   ),
                                 ],
