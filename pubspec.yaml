@@ -27,6 +27,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  dart_vlc: ^0.1.9
   vertical_card_pager: ^1.5.0
   timer_count_down: ^2.2.1
   simple_timer: ^2.0.0

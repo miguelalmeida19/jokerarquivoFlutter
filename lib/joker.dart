@@ -429,56 +429,53 @@ class _JokerState extends State<Joker> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Positioned(
-                                        left: 10,
-                                        child: SizedBox(
-                                          width: 50,
-                                          height: 100,
-                                          child: Neumorphic(
-                                            style: NeumorphicStyle(
-                                              color: const Color(0xFF647AEA),
-                                              shape: NeumorphicShape.flat,
-                                              boxShape:
-                                                  NeumorphicBoxShape.roundRect(
-                                                      BorderRadius.circular(5)),
-                                            ),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  roundNumber.toString(),
-                                                  style: GoogleFonts.getFont(
-                                                    'IBM Plex Sans Thai',
-                                                    fontSize: 22,
-                                                    textStyle: const TextStyle(
-                                                      color: Colors.white,
-                                                    ),
-                                                    fontWeight: FontWeight.bold,
+                                      SizedBox(
+                                        width: 50,
+                                        height: 100,
+                                        child: Neumorphic(
+                                          style: NeumorphicStyle(
+                                            color: const Color(0xFF647AEA),
+                                            shape: NeumorphicShape.flat,
+                                            boxShape:
+                                                NeumorphicBoxShape.roundRect(
+                                                    BorderRadius.circular(5)),
+                                          ),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                roundNumber.toString(),
+                                                style: GoogleFonts.getFont(
+                                                  'IBM Plex Sans Thai',
+                                                  fontSize: 22,
+                                                  textStyle: const TextStyle(
+                                                    color: Colors.white,
                                                   ),
-                                                  textAlign: TextAlign.center,
+                                                  fontWeight: FontWeight.bold,
                                                 ),
-                                                const Divider(
-                                                  height: 20,
-                                                  thickness: 5,
-                                                  indent: 5,
-                                                  endIndent: 5,
-                                                  color: Colors.white,
-                                                ),
-                                                Text(
-                                                  maxRound.toString(),
-                                                  style: GoogleFonts.getFont(
-                                                    'IBM Plex Sans Thai',
-                                                    fontSize: 17,
-                                                    textStyle: const TextStyle(
-                                                      color: Color(0xFFcccccc),
-                                                    ),
-                                                    fontWeight: FontWeight.bold,
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              const Divider(
+                                                height: 20,
+                                                thickness: 5,
+                                                indent: 5,
+                                                endIndent: 5,
+                                                color: Colors.white,
+                                              ),
+                                              Text(
+                                                maxRound.toString(),
+                                                style: GoogleFonts.getFont(
+                                                  'IBM Plex Sans Thai',
+                                                  fontSize: 17,
+                                                  textStyle: const TextStyle(
+                                                    color: Color(0xFFcccccc),
                                                   ),
-                                                  textAlign: TextAlign.center,
+                                                  fontWeight: FontWeight.bold,
                                                 ),
-                                              ],
-                                            ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ),
@@ -487,19 +484,18 @@ class _JokerState extends State<Joker> {
                                       ),
                                       SizedBox(
                                         width: 650,
-                                        child: Flexible(
-                                            child: SelectableText(
+                                        child: SelectableText(
                                           _atual.pergunta!,
                                           style: GoogleFonts.getFont(
-                                            'IBM Plex Sans Thai',
-                                            fontSize: 25,
-                                            textStyle: const TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                            fontWeight: FontWeight.bold,
+                                        'IBM Plex Sans Thai',
+                                        fontSize: 25,
+                                        textStyle: const TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                        fontWeight: FontWeight.bold,
                                           ),
                                           textAlign: TextAlign.center,
-                                        )),
+                                        ),
                                       ),
                                     ],
                                   ),
