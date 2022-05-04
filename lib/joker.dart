@@ -113,6 +113,7 @@ class _JokerState extends State<Joker> {
   }
 
   void acertou() {
+    selected = [];
     jokersSelected = 0;
     jokerSelected = false;
     options = [true, true, true, true];
@@ -155,6 +156,7 @@ class _JokerState extends State<Joker> {
   }
 
   void errou() {
+    selected = [];
     jokersSelected = 0;
     jokerSelected = false;
     options = [true, true, true, true];
@@ -212,6 +214,7 @@ class _JokerState extends State<Joker> {
   }
 
   void acabouTempo() {
+    selected = [];
     jokersSelected = 0;
     jokerSelected = false;
     options = [true, true, true, true];
