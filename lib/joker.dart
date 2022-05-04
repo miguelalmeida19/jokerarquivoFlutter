@@ -594,29 +594,19 @@ class _JokerState extends State<Joker> {
                                                           _atual
                                                               .respostaCerta!) {
                                                         setState(() {
-                                                          selected.remove(0);
-                                                          options[selected[0]] =
-                                                              false;
+                                                          options[selected.first] =
+                                                          false;
                                                           jokerSelected = false;
                                                           jokersSelected = 0;
-                                                          color[0] = const Color(0xFF647AEA);
+                                                          color[selected.last] = const Color(0xFF647AEA);
                                                         });
                                                       } else {
-                                                        int max = 1;
-                                                        int randomNumber =
-                                                            Random()
-                                                                .nextInt(max);
                                                         setState(() {
-                                                          selected.remove(
-                                                              selected[
-                                                                  randomNumber]);
-                                                          options[selected[
-                                                                  randomNumber]] =
-                                                              false;
-                                                          color[selected[
-                                                          randomNumber]] = const Color(0xFF647AEA);
-
+                                                          options[selected.last] =
+                                                          false;
                                                           jokerSelected = false;
+                                                          jokersSelected = 0;
+                                                          color[selected.first] = const Color(0xFF647AEA);
                                                         });
                                                       }
                                                     }
@@ -707,28 +697,19 @@ class _JokerState extends State<Joker> {
                                                           _atual
                                                               .respostaCerta!) {
                                                         setState(() {
-                                                          selected.remove(1);
-                                                          options[selected[0]] =
-                                                              false;
+                                                          options[selected.first] =
+                                                          false;
                                                           jokerSelected = false;
                                                           jokersSelected = 0;
-                                                          color[1] = const Color(0xFF647AEA);
+                                                          color[selected.last] = const Color(0xFF647AEA);
                                                         });
                                                       } else {
-                                                        int max = 1;
-                                                        int randomNumber =
-                                                            Random()
-                                                                .nextInt(max);
                                                         setState(() {
-                                                          selected.remove(
-                                                              selected[
-                                                                  randomNumber]);
-                                                          options[selected[
-                                                                  randomNumber]] =
-                                                              false;
+                                                          options[selected.last] =
+                                                          false;
                                                           jokerSelected = false;
-                                                          color[selected[
-                                                          randomNumber]] = const Color(0xFF647AEA);
+                                                          jokersSelected = 0;
+                                                          color[selected.first] = const Color(0xFF647AEA);
                                                         });
                                                       }
                                                     }
@@ -819,28 +800,19 @@ class _JokerState extends State<Joker> {
                                                           _atual
                                                               .respostaCerta!) {
                                                         setState(() {
-                                                          selected.remove(2);
-                                                          options[selected[0]] =
-                                                              false;
+                                                          options[selected.first] =
+                                                          false;
                                                           jokerSelected = false;
                                                           jokersSelected = 0;
-                                                          color[2] = const Color(0xFF647AEA);
+                                                          color[selected.last] = const Color(0xFF647AEA);
                                                         });
                                                       } else {
-                                                        int max = 1;
-                                                        int randomNumber =
-                                                            Random()
-                                                                .nextInt(max);
                                                         setState(() {
-                                                          selected.remove(
-                                                              selected[
-                                                                  randomNumber]);
-                                                          options[selected[
-                                                                  randomNumber]] =
-                                                              false;
+                                                          options[selected.last] =
+                                                          false;
                                                           jokerSelected = false;
-                                                          color[selected[
-                                                          randomNumber]] = const Color(0xFF647AEA);
+                                                          jokersSelected = 0;
+                                                          color[selected.first] = const Color(0xFF647AEA);
                                                         });
                                                       }
                                                     }
@@ -931,28 +903,19 @@ class _JokerState extends State<Joker> {
                                                           _atual
                                                               .respostaCerta!) {
                                                         setState(() {
-                                                          selected.remove(3);
-                                                          options[selected[0]] =
-                                                              false;
+                                                          options[selected.first] =
+                                                          false;
                                                           jokerSelected = false;
                                                           jokersSelected = 0;
-                                                          color[3] = const Color(0xFF647AEA);
+                                                          color[selected.last] = const Color(0xFF647AEA);
                                                         });
                                                       } else {
-                                                        int max = 1;
-                                                        int randomNumber =
-                                                            Random()
-                                                                .nextInt(max);
                                                         setState(() {
-                                                          selected.remove(
-                                                              selected[
-                                                                  randomNumber]);
-                                                          options[selected[
-                                                                  randomNumber]] =
-                                                              false;
+                                                          options[selected.last] =
+                                                          false;
                                                           jokerSelected = false;
-                                                          color[selected[
-                                                          randomNumber]] = const Color(0xFF647AEA);
+                                                          jokersSelected = 0;
+                                                          color[selected.first] = const Color(0xFF647AEA);
                                                         });
                                                       }
                                                     }
